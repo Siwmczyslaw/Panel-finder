@@ -1,232 +1,38 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#183b32">
-<title>Panel Finder</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#183b32"><title>Panel Finder</title>
 <style>
-:root{--green:#183b32;--green2:#285044;--bg:#f3f6f4;--card:#fff;--text:#17231e;--muted:#65736c;--line:#dce5df;--accent:#1d7657;--red:#a33131}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-header{background:var(--green);color:white;padding:22px 16px 18px}header h1{margin:0;font-size:25px}header p{margin:4px 0 16px;color:#d2e8df;font-size:14px}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:var(--green2);border-radius:12px;padding:12px}.stat small{display:block;color:#d2e8df}.stat strong{font-size:25px}
-main{max-width:760px;margin:0 auto;padding:15px;display:grid;gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 2px 8px #183b3208}
-h2{font-size:18px;margin:0 0 8px}.hint{font-size:13px;color:var(--muted);margin:0 0 14px}
-label{display:block;font-weight:650;font-size:14px;margin:12px 0 6px}
-input,select{width:100%;font:inherit;padding:12px;border:1px solid #cbd7d0;border-radius:10px;background:white;color:var(--text);min-height:46px}
-button{font:inherit;font-weight:650;border:0;border-radius:10px;padding:11px 13px;cursor:pointer;min-height:42px}
-.primary{background:var(--accent);color:white;width:100%;margin-top:14px}.secondary{background:#edf3ef;color:#244437;border:1px solid var(--line)}.danger{background:#fff0f0;color:var(--red);border:1px solid #f0cccc}.small{font-size:13px;padding:8px 10px;min-height:36px}
-.searchrow{display:flex;gap:10px;align-items:center}.searchrow input{flex:1}.count{font-size:13px;color:var(--muted);white-space:nowrap}
-.item{border:1px solid var(--line);border-radius:12px;padding:13px;margin-top:10px}.itemtop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.code{font-weight:800;font-size:18px;overflow-wrap:anywhere}.location{font-size:25px;font-weight:800;margin-top:3px}.muted{font-size:12px;color:var(--muted)}.pill{font-size:12px;font-weight:700;border-radius:999px;padding:5px 8px;background:#e1f3e9;color:#176341;white-space:nowrap}.pill.removed{background:#eee;color:#555}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.history{margin-top:12px;padding:11px;background:#f4f7f5;border-radius:10px}.history div{padding:6px 0;border-bottom:1px solid #e1e8e3;font-size:13px}.history div:last-child{border-bottom:0}.empty{text-align:center;padding:24px 10px;color:var(--muted)}
-.tools{display:flex;gap:8px;flex-wrap:wrap}.tools button{flex:1}.foot{font-size:12px;color:var(--muted);padding:0 2px 20px}
-@media(min-width:650px){main{grid-template-columns:1fr 1fr;align-items:start}.searchcard{grid-column:1/-1}.itemlist{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}.itemlist .item{align-self:start}}
-</style>
-</head>
-<body>
-<header>
-  <h1>▦ Panel Finder</h1>
-  <p>Concrete Panel Locator</p>
-  <div class="stats">
-    <div class="stat"><small>On racks</small><strong id="activeCount">0</strong></div>
-    <div class="stat"><small>Total in database</small><strong id="totalCount">0</strong></div>
-  </div>
-</header>
-<main>
-  <section class="card">
-    <h2>Add panel / move rack</h2>
-    <p class="hint">Enter a panel ID and choose a rack. If the panel already exists, its location will be updated and its history preserved.</p>
-    <form id="panelForm">
-      <label for="panelCode">Panel number / ID</label>
-      <input id="panelCode" placeholder="E.g. MFC 103/2" autocomplete="off" required>
-      <label for="rack">Destination rack</label>
-      <select id="rack"></select>
-      <button class="primary" type="submit">Save panel</button>
-    </form>
-    <div id="formMessage" class="hint" style="margin:10px 0 0" aria-live="polite"></div>
-  </section>
-  <section class="card">
-    <h2>Data backup</h2>
-    <p class="hint">Data is saved on this device. Export a backup regularly, especially before changing phones or browsers.</p>
-    <div class="tools">
-      <button class="secondary" id="exportBtn">Export backup</button>
-      <button class="secondary" id="importBtn">Import backup</button>
-      <input id="importFile" type="file" accept="application/json,.json" hidden>
-    </div>
-    <p class="hint" style="margin:10px 0 0">The app works offline once the file is opened. Data does not automatically sync between different phones.</p>
-  </section>
-  <section class="card searchcard">
-    <h2>Find a panel</h2>
-    <div class="searchrow">
-      <input id="search" placeholder="Search panel ID or rack..." autocomplete="off">
-      <span class="count" id="resultCount">0 results</span>
-    </div>
-    <label style="display:flex;align-items:center;gap:8px;font-weight:500;margin-top:12px"><input type="checkbox" id="showRemoved" style="width:18px;min-height:18px"> Show removed panels</label>
-    <div id="items" class="itemlist"></div>
-  </section>
-  <div class="foot">Tip: to move a panel, enter the same ID and choose its new rack. “Removed” marks the panel as taken away while preserving its full history.</div>
-</main>
+:root{--g:#183b32;--g2:#285044;--bg:#f3f6f4;--line:#dce5df;--a:#1d7657;--red:#a33131}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#17231e;font:16px/1.45 system-ui,Arial,sans-serif}header{background:var(--g);color:white;padding:22px 16px 18px}header h1{margin:0;font-size:25px}header p{margin:4px 0 16px;color:#d2e8df;font-size:14px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:var(--g2);border-radius:12px;padding:12px}.stat small{display:block;color:#d2e8df}.stat strong{font-size:25px}main{max-width:760px;margin:auto;padding:15px;display:grid;gap:14px}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 2px 8px #183b3208}h2{font-size:18px;margin:0 0 8px}.hint{font-size:13px;color:#65736c;margin:0 0 14px}label{display:block;font-weight:650;font-size:14px;margin:12px 0 6px}input,select{width:100%;font:inherit;padding:12px;border:1px solid #cbd7d0;border-radius:10px;background:white;min-height:46px}button{font:inherit;font-weight:650;border:0;border-radius:10px;padding:11px 13px;cursor:pointer;min-height:42px}.primary{background:var(--a);color:white;width:100%;margin-top:14px}.secondary{background:#edf3ef;color:#244437;border:1px solid var(--line)}.danger{background:#fff0f0;color:var(--red);border:1px solid #f0cccc}.small{font-size:13px;padding:8px 10px;min-height:36px}.searchrow{display:flex;gap:10px;align-items:center}.searchrow input{flex:1}.count{font-size:13px;color:#65736c;white-space:nowrap}.item{border:1px solid var(--line);border-radius:12px;padding:13px;margin-top:10px}.itemtop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.code{font-weight:800;font-size:18px;overflow-wrap:anywhere}.location{font-size:25px;font-weight:800;margin-top:3px}.muted{font-size:12px;color:#65736c}.pill{font-size:12px;font-weight:700;border-radius:999px;padding:5px 8px;background:#e1f3e9;color:#176341;white-space:nowrap}.pill.removed{background:#eee;color:#555}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.history{margin-top:12px;padding:11px;background:#f4f7f5;border-radius:10px}.history div{padding:6px 0;border-bottom:1px solid #e1e8e3;font-size:13px}.empty{text-align:center;padding:24px 10px;color:#65736c}.tools{display:flex;gap:8px;flex-wrap:wrap}.tools button{flex:1}.foot,.statusline{font-size:12px;color:#65736c}.good{color:#176341}.bad{color:#a33131}@media(min-width:650px){main{grid-template-columns:1fr 1fr;align-items:start}.searchcard{grid-column:1/-1}.itemlist{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}.itemlist .item{align-self:start}}
+</style></head><body><header><h1>▦ Panel Finder</h1><p>Concrete Panel Locator · Shared live database</p><div class="stats"><div class="stat"><small>On racks</small><strong id="activeCount">0</strong></div><div class="stat"><small>Total in database</small><strong id="totalCount">0</strong></div></div></header>
+<main><section class="card"><h2>Add panel / move rack</h2><p class="hint">Enter a panel ID and choose a rack. Existing panel locations update and history is preserved for everyone using the app.</p><form id="panelForm"><label for="panelCode">Panel number / ID</label><input id="panelCode" placeholder="E.g. MFC 103/2" autocomplete="off" required><label for="rack">Destination rack</label><select id="rack"></select><button class="primary" id="saveBtn" type="submit">Save panel</button></form><div id="formMessage" class="hint" style="margin:10px 0 0" aria-live="polite"></div><div id="connectionStatus" class="statusline">Connecting to shared database…</div></section>
+<section class="card"><h2>Data backup</h2><p class="hint">Export a JSON backup of the shared database, or import a backup. Import adds or updates records in the shared database.</p><div class="tools"><button class="secondary" id="exportBtn">Export backup</button><button class="secondary" id="importBtn">Import backup</button><input id="importFile" type="file" accept="application/json,.json" hidden></div></section>
+<section class="card searchcard"><h2>Find a panel</h2><div class="searchrow"><input id="search" placeholder="Search panel ID or rack..." autocomplete="off"><span class="count" id="resultCount">0 results</span></div><label style="display:flex;align-items:center;gap:8px;font-weight:500;margin-top:12px"><input type="checkbox" id="showRemoved" style="width:18px;min-height:18px"> Show removed panels</label><div id="items" class="itemlist"></div></section><div class="foot">Changes sync live between devices. Restrict database access to your team before using real workplace data.</div></main>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script>
-(() => {
-  const STORAGE_KEY = 'panelFinderData_v1';
-  const rackSelect = document.getElementById('rack');
-  const form = document.getElementById('panelForm');
-  const codeInput = document.getElementById('panelCode');
-  const searchInput = document.getElementById('search');
-  const showRemovedInput = document.getElementById('showRemoved');
-  const itemsEl = document.getElementById('items');
-  const messageEl = document.getElementById('formMessage');
-  let panels = loadData();
-  let expandedHistory = new Set();
-
-  // Valid rack numbers: 1–280, excluding numbers ending in 6, 7, 8 or 9.
-  // This creates 168 rack numbers and 336 A/B locations.
-  for (let n=1;n<=280;n++) {
-    if (n % 10 > 5) continue;
-    for (const side of ['A','B']) {
-      const opt = document.createElement('option');
-      opt.value = `${n}${side}`;
-      opt.textContent = `${n}${side}`;
-      rackSelect.appendChild(opt);
-    }
-  }
-
-  function loadData() {
-    try {
-      const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-      return Array.isArray(parsed) ? parsed.filter(p => p && p.code && p.location && Array.isArray(p.history)) : [];
-    } catch { return []; }
-  }
-  function persist() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(panels));
-      return true;
-    } catch {
-      alert('Could not save data on this device. Export a backup and check available storage.');
-      return false;
-    }
-  }
-  function esc(s) {
-    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  }
-  function stamp() {
-    return new Date().toLocaleString('pl-PL', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
-  }
-  function render() {
-    const active = panels.filter(p => p.status !== 'removed').length;
-    document.getElementById('activeCount').textContent = active;
-    document.getElementById('totalCount').textContent = panels.length;
-    const q = searchInput.value.trim().toLocaleLowerCase('pl-PL');
-    const showRemoved = showRemovedInput.checked;
-    const list = panels.filter(p => (showRemoved || p.status !== 'removed') &&
-      (p.code.toLocaleLowerCase('pl-PL').includes(q) || p.location.toLowerCase().includes(q)));
-    document.getElementById('resultCount').textContent = `${list.length} results`;
-    if (!list.length) {
-      itemsEl.innerHTML = `<div class="empty">${panels.length ? 'No matching panels.' : 'No panels saved yet. Add your first panel above.'}</div>`;
-      return;
-    }
-    list.sort((a,b) => a.code.localeCompare(b.code, 'pl', {numeric:true}));
-    itemsEl.innerHTML = list.map(p => {
-      const removed = p.status === 'removed';
-      const history = p.history || [];
-      const open = expandedHistory.has(p.code.toLowerCase());
-      const historyHtml = open ? `<div class="history"><strong>Location history</strong>${
-        history.length ? [...history].reverse().map(h => `<div><b>${esc(h.location)}</b> · ${esc(h.date)}${h.action ? ` · ${esc(h.action)}` : ''}</div>`).join('') : '<div>No previous location changes.</div>'
-      }</div>` : '';
-      return `<article class="item">
-        <div class="itemtop"><div><div class="code">${esc(p.code)}</div><div class="muted">Current location</div><div class="location">${removed ? 'Removed' : esc(p.location)}</div></div><span class="pill ${removed?'removed':''}">${removed?'Removed':'On rack'}</span></div>
-        <div class="actions">
-          <button class="secondary small" data-action="history" data-code="${esc(p.code)}">${open?'Hide history':'History'} (${history.length})</button>
-          ${!removed ? `<button class="secondary small" data-action="move" data-code="${esc(p.code)}">Move rack</button><button class="danger small" data-action="remove" data-code="${esc(p.code)}">Removed</button>` : `<button class="secondary small" data-action="restore" data-code="${esc(p.code)}">Restore</button>`}
-        </div>${historyHtml}</article>`;
-    }).join('');
-  }
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const code = codeInput.value.trim();
-    const newRack = rackSelect.value;
-    if (!code) return;
-    const existing = panels.find(p => p.code.toLocaleLowerCase('pl-PL') === code.toLocaleLowerCase('pl-PL'));
-    if (existing) {
-      if (existing.status === 'removed') {
-        existing.history.push({location: existing.location, date: stamp(), action:'Restored / previous entry'});
-      } else if (existing.location !== newRack) {
-        existing.history.push({location: existing.location, date: stamp(), action:'Moved'});
-      }
-      existing.code = code;
-      existing.location = newRack;
-      existing.status = 'active';
-      messageEl.textContent = existing.history.length ? `Updated ${code} on rack ${newRack}.` : `Panel ${code} is saved on rack ${newRack}.`;
-    } else {
-      panels.push({code, location:newRack, status:'active', createdAt:stamp(), history:[]});
-      messageEl.textContent = `Added panel ${code} to rack ${newRack}.`;
-    }
-    persist();
-    codeInput.value = '';
-    searchInput.value = '';
-    showRemovedInput.checked = false;
-    render();
-    codeInput.focus();
-  });
-  itemsEl.addEventListener('click', e => {
-    const btn = e.target.closest('button[data-action]');
-    if (!btn) return;
-    const code = btn.dataset.code;
-    const p = panels.find(x => x.code.toLowerCase() === code.toLowerCase());
-    if (!p) return;
-    switch(btn.dataset.action) {
-      case 'history':
-        if (expandedHistory.has(p.code.toLowerCase())) expandedHistory.delete(p.code.toLowerCase());
-        else expandedHistory.add(p.code.toLowerCase());
-        break;
-      case 'move':
-        codeInput.value = p.code;
-        rackSelect.value = p.location;
-        codeInput.focus();
-        messageEl.textContent = `Choose a new rack for ${p.code}, then press “Save panel”.`;
-        window.scrollTo({top:0,behavior:'smooth'});
-        return;
-      case 'remove':
-        if (confirm(`Mark panel ${p.code} as removed from rack ${p.location}? Its history will be preserved.`)) {
-          p.history.push({location:p.location,date:stamp(),action:'Removed from rack'});
-          p.status = 'removed';
-          p.removedAt = stamp();
-        }
-        break;
-      case 'restore':
-        codeInput.value = p.code;
-        rackSelect.value = p.location;
-        messageEl.textContent = `Choose the rack where the panel is located again, then press “Save panel”.`;
-        window.scrollTo({top:0,behavior:'smooth'});
-        return;
-    }
-    persist();
-    render();
-  });
-  searchInput.addEventListener('input', render);
-  showRemovedInput.addEventListener('change', render);
-  document.getElementById('exportBtn').addEventListener('click', () => {
-    const blob = new Blob([JSON.stringify({app:'Panel Finder',version:1,exportedAt:new Date().toISOString(),panels},null,2)], {type:'application/json'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = `panel-finder-backup-${new Date().toISOString().slice(0,10)}.json`;
-    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-  });
-  document.getElementById('importBtn').addEventListener('click', () => document.getElementById('importFile').click());
-  document.getElementById('importFile').addEventListener('change', async e => {
-    const file = e.target.files[0]; if (!file) return;
-    try {
-      const parsed = JSON.parse(await file.text());
-      const incoming = Array.isArray(parsed) ? parsed : parsed.panels;
-      if (!Array.isArray(incoming) || incoming.some(p => !p || !p.code || !p.location || !Array.isArray(p.history))) throw new Error('invalid');
-      if (!confirm(`Import will replace the current database of ${panels.length} panels with ${incoming.length} panels from the file. Continue?`)) { e.target.value=''; return; }
-      panels = incoming;
-      persist(); render();
-      messageEl.textContent = 'Backup imported successfully.';
-    } catch { alert('Could not read backup. Choose a valid JSON file exported from Panel Finder.'); }
-    e.target.value = '';
-  });
+(()=> {
+  // Replace these values with the COMPLETE config shown in Firebase Console > Project settings > Your apps > Config.
+  const firebaseConfig={
+    apiKey:"AIzaSyBapxS-1iZKI_vaPZKkc_EXs9nhOASEqTw",
+    authDomain:"panel-finder-6ebd1.firebaseapp.com",
+    projectId:"panel-finder-6ebd1",
+    storageBucket:"panel-finder-6ebd1.firebasestorage.app",
+    messagingSenderId:"290595404003",
+    appId:"1:290595404003:web:1ce5d72ab173e63fa4add6"
+  };
+  const $=id=>document.getElementById(id),rackSelect=$('rack'),form=$('panelForm'),codeInput=$('panelCode'),searchInput=$('search'),showRemovedInput=$('showRemoved'),itemsEl=$('items'),messageEl=$('formMessage'),connectionEl=$('connectionStatus');
+  let panels=[],expandedHistory=new Set(),db=null,busy=false;
+  for(let n=1;n<=280;n++){if(n%10>5)continue;for(const side of ['A','B']){const o=document.createElement('option');o.value=`${n}${side}`;o.textContent=o.value;rackSelect.appendChild(o)}}
+  const stamp=()=>new Date().toLocaleString('en-GB',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const requireDb=()=>{if(!db)throw Error('Firebase config is missing.');return db};
+  function render(){const active=panels.filter(p=>p.status!=='removed').length;$('activeCount').textContent=active;$('totalCount').textContent=panels.length;const q=searchInput.value.trim().toLocaleLowerCase('en-GB'),show=showRemovedInput.checked;const list=panels.filter(p=>(show||p.status!=='removed')&&(String(p.code||'').toLowerCase().includes(q)||String(p.location||'').toLowerCase().includes(q)));$('resultCount').textContent=`${list.length} results`;if(!list.length){itemsEl.innerHTML=`<div class="empty">${panels.length?'No matching panels.':'No panels saved yet. Add your first panel above.'}</div>`;return}list.sort((a,b)=>String(a.code).localeCompare(String(b.code),'en',{numeric:true}));itemsEl.innerHTML=list.map(p=>{const removed=p.status==='removed',history=Array.isArray(p.history)?p.history:[],open=expandedHistory.has(p.id),historyHtml=open?`<div class="history"><strong>Location history</strong>${history.length?[...history].reverse().map(h=>`<div><b>${esc(h.location||'Unknown')}</b> · ${esc(h.date||'')}${h.action?` · ${esc(h.action)}`:''}</div>`).join(''):'<div>No previous location changes.</div>'}</div>`:'';return `<article class="item"><div class="itemtop"><div><div class="code">${esc(p.code)}</div><div class="muted">Current location</div><div class="location">${removed?'Removed':esc(p.location)}</div></div><span class="pill ${removed?'removed':''}">${removed?'Removed':'On rack'}</span></div><div class="actions"><button class="secondary small" data-action="history" data-id="${esc(p.id)}">${open?'Hide history':'History'} (${history.length})</button>${!removed?`<button class="secondary small" data-action="move" data-id="${esc(p.id)}">Move rack</button><button class="danger small" data-action="remove" data-id="${esc(p.id)}">Removed</button>`:`<button class="secondary small" data-action="restore" data-id="${esc(p.id)}">Restore</button>`}</div>${historyHtml}</article>`}).join('')}
+  async function findExisting(code){const snap=await requireDb().collection('panels').get();return snap.docs.find(d=>String(d.data().code||'').toLowerCase()===code.toLowerCase())||null}
+  async function write(data,id){const c=requireDb().collection('panels');if(id)await c.doc(id).set(data);else await c.add(data)}
+  form.addEventListener('submit',async e=>{e.preventDefault();if(busy)return;const code=codeInput.value.trim(),newRack=rackSelect.value;if(!code)return;busy=true;$('saveBtn').disabled=true;$('saveBtn').textContent='Saving…';try{const doc=await findExisting(code),now=stamp();if(doc){const old=doc.data(),history=Array.isArray(old.history)?[...old.history]:[];if(old.status==='removed')history.push({location:old.location||'',date:now,action:'Restored / previous entry'});else if(old.location!==newRack)history.push({location:old.location||'',date:now,action:'Moved'});await write({...old,code,location:newRack,status:'active',history,updatedAt:now},doc.id);messageEl.textContent=`Updated ${code} on rack ${newRack}.`}else{await write({code,location:newRack,status:'active',createdAt:now,updatedAt:now,history:[]});messageEl.textContent=`Added panel ${code} to rack ${newRack}.`}codeInput.value='';searchInput.value='';showRemovedInput.checked=false;codeInput.focus()}catch(err){messageEl.textContent=`Could not save: ${err.message}`}finally{busy=false;$('saveBtn').disabled=false;$('saveBtn').textContent='Save panel'}});
+  itemsEl.addEventListener('click',async e=>{const b=e.target.closest('button[data-action]');if(!b)return;const p=panels.find(x=>x.id===b.dataset.id);if(!p)return;switch(b.dataset.action){case'history':expandedHistory.has(p.id)?expandedHistory.delete(p.id):expandedHistory.add(p.id);render();return;case'move':codeInput.value=p.code;rackSelect.value=p.location;codeInput.focus();messageEl.textContent=`Choose a new rack for ${p.code}, then press “Save panel”.`;window.scrollTo({top:0,behavior:'smooth'});return;case'remove':if(!confirm(`Mark panel ${p.code} as removed from rack ${p.location}? Its history will be preserved.`))return;try{const now=stamp(),history=[...(p.history||[]),{location:p.location,date:now,action:'Removed from rack'}];await requireDb().collection('panels').doc(p.id).update({history,status:'removed',removedAt:now,updatedAt:now})}catch(err){alert(`Could not mark as removed: ${err.message}`)}return;case'restore':codeInput.value=p.code;rackSelect.value=p.location;messageEl.textContent='Choose the rack where the panel is located again, then press “Save panel”.';window.scrollTo({top:0,behavior:'smooth'});return}});
+  searchInput.addEventListener('input',render);showRemovedInput.addEventListener('change',render);
+  $('exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify({app:'Panel Finder',version:2,exportedAt:new Date().toISOString(),panels:panels.map(({id,...p})=>p)},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`panel-finder-backup-${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url)});
+  $('importBtn').addEventListener('click',()=>$('importFile').click());
+  $('importFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{const parsed=JSON.parse(await file.text()),incoming=Array.isArray(parsed)?parsed:parsed.panels;if(!Array.isArray(incoming)||incoming.some(p=>!p||!p.code||!p.location||!Array.isArray(p.history)))throw Error('Invalid backup file');if(!confirm(`Import will add/update ${incoming.length} panels in the SHARED database. Continue?`)){e.target.value='';return}for(const p of incoming){const found=await findExisting(String(p.code)),data={...p,updatedAt:stamp()};delete data.id;if(found)await requireDb().collection('panels').doc(found.id).set({...found.data(),...data});else await requireDb().collection('panels').add(data)}messageEl.textContent='Backup imported into shared database.'}catch(err){alert(`Could not import backup: ${err.message}`)}e.target.value=''});
+  if(Object.values(firebaseConfig).some(v=>String(v).startsWith('PASTE_'))){connectionEl.textContent='Setup needed: paste the complete Firebase config into this file.';connectionEl.className='statusline bad'}else{try{firebase.initializeApp(firebaseConfig);db=firebase.firestore();db.collection('panels').onSnapshot(s=>{panels=s.docs.map(d=>({id:d.id,...d.data()}));connectionEl.textContent='Connected · changes sync live across devices';connectionEl.className='statusline good';render()},err=>{connectionEl.textContent=`Database error: ${err.message}`;connectionEl.className='statusline bad'})}catch(err){connectionEl.textContent=`Firebase setup error: ${err.message}`;connectionEl.className='statusline bad'}}
   render();
 })();
-</script>
-</body>
-</html>
+</script></body></html>
